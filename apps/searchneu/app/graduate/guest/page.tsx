@@ -2,19 +2,8 @@ import { GuestHeaderClient } from "@/components/graduate/GuestHeaderClient";
 import { GuestPlanClient } from "@/components/graduate/GuestPlanClient";
 import { getMajor, getMinor } from "@/lib/dal/catalog";
 import { getCourseNamesBatch } from "@/lib/dal/courses";
-import { Major, Minor, Requirement } from "@/lib/graduate/types";
-
-function collectCourseKeys(reqs: Requirement[], out: Set<string>): void {
-  for (const req of reqs) {
-    if (req.type === "COURSE") {
-      out.add(`${req.subject}-${req.classId}`);
-    } else if (req.type === "AND" || req.type === "OR" || req.type === "XOM") {
-      collectCourseKeys(req.courses, out);
-    } else if (req.type === "SECTION") {
-      collectCourseKeys(req.requirements, out);
-    }
-  }
-}
+import { Major, Minor } from "@/lib/graduate/types";
+import { collectCourseKeys } from "@/lib/graduate/requirementUtils";
 
 export default async function Page({
   searchParams,
